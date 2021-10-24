@@ -7,10 +7,10 @@ using CORE.Users.Models;
 
 namespace CORE.Users.Interfaces
 {
-    public  interface IUser: IDisposable
+    public interface IUser : IDisposable
     {
-        List<UserModel> GetUsers();
-        UserModel GetUser(int ID);
+        List<Models.UserModel> GetUsers();
+        Models.UserModel GetUser(int ID);
         long AddUser(UserModel model);
         bool UpdateUser(UserModel model);
         void DeleteUser(int ID);

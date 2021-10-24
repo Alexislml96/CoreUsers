@@ -18,8 +18,8 @@ namespace CORE.Users.Services
             return typeServer switch
             {
                 EServer.UDEFINED => throw new NullReferenceException(),
-                EServer.LOCAL => new UserService(BridgeDBConnection<UserModel>.Create(ConnectionStrings.LocalServer, DbEnum.Sql), ConnectionStrings.LocalServer),
-                EServer.CLOUD => new UserService(BridgeDBConnection<UserModel>.Create(ConnectionStrings.CloudServer, DbEnum.Sql), ConnectionStrings.CloudServer),
+                EServer.LOCAL => new UserService(BridgeDBConnection<UserModel>.Create(ConnectionStrings.LocalServer, DbEnum.Sql)),
+                EServer.CLOUD => new UserService(BridgeDBConnection<UserModel>.Create(ConnectionStrings.CloudServer, DbEnum.Sql)),
                 _ => throw new NullReferenceException(),
             };
 
@@ -35,6 +35,17 @@ namespace CORE.Users.Services
                 _ => throw new NullReferenceException(),
             };
 
+        }
+
+        public static IPasswordService Password(EServer typerServer)
+        {
+            return typerServer switch
+            {
+                EServer.UDEFINED => throw new NullReferenceException(),
+                EServer.LOCAL => new PasswordService(BridgeDBConnection<LoginMinModel>.Create(ConnectionStrings.LocalServer, DbEnum.Sql)),
+                EServer.CLOUD => new PasswordService(BridgeDBConnection<LoginMinModel>.Create(ConnectionStrings.CloudServer, DbEnum.Sql)),
+                _ => throw new NullReferenceException(),
+            };
         }
     }
 }

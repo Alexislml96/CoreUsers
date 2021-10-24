@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Alexis.CORE.Connection.Interfaces;
+using Alexis.CORE.Connection.Models;
 using CORE.Users.Interfaces;
 using CORE.Users.Models;
 using CORE.Users.Tools;
@@ -18,50 +19,40 @@ namespace CORE.Users.Services
 {
     public class UserService : IUser, IDisposable
     {
-        private bool disposedValue;
-        private IConnectionDB<UserModel> _conn;
-        private List<Tuple<string, object, int>> _parameters = new List<Tuple<string, object, int>>();
-
-        string _connectionString = string.Empty;
+        bool disposedValue;
+        IConnectionDB<UserModel> _conn;
+        private readonly HashTool _hashTool;
+        DynamicParameters _parameters = new DynamicParameters();
         public UserService(IConnectionDB<UserModel> conn)
         {
             _conn = conn;
+            _hashTool = new HashTool();
         }
-        public UserService(IConnectionDB<UserModel> conn, string connectionString)
-        {
-            _conn = conn;
-            _connectionString = EncryptTool.Decrypt(connectionString);
-        }
-
-        public List<UserModel> GetUsers()
+        public List<Models.UserModel> GetUsers()
         {
             List<UserModel> list = new List<UserModel>();
 
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
+                _conn.PrepararProcedimiento("dbo.[USERS.Get_All]", null);
+                var Json = (string)_conn.QueryFirstOrDefaultDapper(TipoDato.Cadena);
+                if (Json != string.Empty)
                 {
-                    var Json = connection.QueryFirstOrDefault<string>("dbo.[USERS.Get_All]", null, commandType: CommandType.StoredProcedure);
-
-                    if (Json != string.Empty)
+                    JArray arr = JArray.Parse(Json);
+                    foreach (JObject jsonOperaciones in arr.Children<JObject>())
                     {
-                        JArray arr = JArray.Parse(Json);
-                        foreach (JObject jsonOperaciones in arr.Children<JObject>())
+                        list.Add(new UserModel()
                         {
-                            list.Add(new UserModel()
-                            {
-                                Identificador = Convert.ToInt32(jsonOperaciones["Id"].ToString()),
-                                Name = jsonOperaciones["Name"].ToString(),
-                                LastName = jsonOperaciones["LastName"].ToString(),
-                                Nick = jsonOperaciones["Nick"].ToString(),
-                                CreateDate = DateTime.Parse(jsonOperaciones["CreateDate"].ToString())
-                            });
+                            Identificador = Convert.ToInt32(jsonOperaciones["Id"].ToString()),
+                            Name = jsonOperaciones["Name"].ToString(),
+                            LastName = jsonOperaciones["LastName"].ToString(),
+                            Nick = jsonOperaciones["Nick"].ToString(),
+                            CreateDate = DateTime.Parse(jsonOperaciones["CreateDate"].ToString())
+                        });
 
-                        }
                     }
-
-
                 }
+
                 return list;
             }
             catch (SqlException sqlEx)
@@ -78,7 +69,7 @@ namespace CORE.Users.Services
             }
             finally
             {
-                _parameters.Clear();
+                _conn.Dispose();
             }
         }
         public UserModel GetUser(int ID)
@@ -86,10 +77,9 @@ namespace CORE.Users.Services
             UserModel UsuarioResp = null;
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    UsuarioResp = (UserModel)connection.QueryFirst<UserModel>("dbo.[USERS.Get_Id]", new { Id = ID }, commandType: CommandType.StoredProcedure);
-                }
+                _parameters.Add("@Id", ID, DbType.Int32, ParameterDirection.Input);
+                _conn.PrepararProcedimiento("dbo.[USERS.Get_Id]", _parameters);
+                UsuarioResp = _conn.QueryFirstOrDefaultDapper();
                 return UsuarioResp;
             }
             catch (SqlException sqlEx)
@@ -106,20 +96,19 @@ namespace CORE.Users.Services
             }
             finally
             {
-                _parameters.Clear();
+                _conn.Dispose();
             }
         }
         public long AddUser(UserModel model)
         {
             long id = 0;
+            model.Password = _hashTool.Hash(model.Password);
 
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    id = connection.QueryFirstOrDefault<long>("dbo.[USERS.Set]", new { p_user_json = JsonConvert.SerializeObject(model) }, commandType: CommandType.StoredProcedure);
-                }
-
+                _parameters.Add("@p_user_json", JsonConvert.SerializeObject(model), DbType.String, ParameterDirection.Input);
+                _conn.PrepararProcedimiento("dbo.[USERS.Set]", _parameters);
+                id = (long)_conn.QueryFirstOrDefaultDapper(TipoDato.Numerico);
                 return id;
             }
             catch (Exception ex)
@@ -128,7 +117,7 @@ namespace CORE.Users.Services
             }
             finally
             {
-                _parameters.Clear();
+                _conn.Dispose();
             }
         }
         public bool UpdateUser(UserModel model)
@@ -136,13 +125,10 @@ namespace CORE.Users.Services
             try
             {
                 bool reply = false;
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    var affectedRows = connection.QueryFirstOrDefault<long>("dbo.[USERS.Update]", new { p_user_json = JsonConvert.SerializeObject(model) }, commandType: CommandType.StoredProcedure);
-
-                    reply = affectedRows < 1 ? false : true;
-                }
-
+                _parameters.Add("@p_user_json", JsonConvert.SerializeObject(model), DbType.String, ParameterDirection.Input);
+                _conn.PrepararProcedimiento("dbo.[USERS.Update]", _parameters);
+                var affectedRows = (long)_conn.QueryFirstOrDefaultDapper(TipoDato.Numerico);
+                reply = affectedRows < 1 ? false : true;
                 return reply;
             }
             catch (Exception ex)
@@ -151,17 +137,16 @@ namespace CORE.Users.Services
             }
             finally
             {
-                _parameters.Clear();
+                _conn.Dispose();
             }
         }
         public void DeleteUser(int ID)
         {
             try
             {
-                using (var connection = new SqlConnection(_connectionString))
-                {
-                    var affectedRows = connection.Execute("dbo.[USERS.Delete]", new { Id = ID }, commandType: CommandType.StoredProcedure);
-                }
+                _parameters.Add("@Id", ID, DbType.Int32, ParameterDirection.Input);
+                _conn.PrepararProcedimiento("dbo.[USERS.Delete]", _parameters);
+                var affectedRows = _conn.Query();
             }
             catch (Exception ex)
             {
@@ -169,7 +154,7 @@ namespace CORE.Users.Services
             }
             finally
             {
-                _parameters.Clear();
+                _conn.Dispose();
             }
         }
 

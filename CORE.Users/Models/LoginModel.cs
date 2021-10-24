@@ -21,6 +21,6 @@ namespace CORE.Users.Models
     public class LoginMinModel
     {
         public string Nick { get; set; }
-        public string Pass { get; set; }
+        public string Password { get; set; }
     }
 }

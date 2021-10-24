@@ -1,52 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using Alexis.CORE.Connection.Interfaces;
 using CORE.Users.Interfaces;
 using CORE.Users.Models;
-using Newtonsoft.Json;
-using System.Data;
-using Newtonsoft.Json.Linq;
-using System.Data.SqlClient;
-using Alexis.CORE.Connection.Interfaces;
-using Alexis.CORE.Connection.Models;
-using CORE.Users.Tools;
 using Dapper;
 
 namespace CORE.Users.Services
 {
-    public class LoginService : ILogin, IDisposable
+    public class PasswordService : IPasswordService, IDisposable
     {
         private bool disposedValue;
-        private IConnectionDB<LoginModel> _conn;
-        
+        private IConnectionDB<LoginMinModel> _conn;
         DynamicParameters _parameters = new DynamicParameters();
-        public LoginService(IConnectionDB<LoginModel> conn)
+
+        public PasswordService(IConnectionDB<LoginMinModel> conn)
         {
             _conn = conn;
         }
 
-        public LoginModel Login(LoginMinModel user)
+        public LoginMinModel CheckUser(LoginMinModel login)
         {
             try
             {
-                LoginModel model = new LoginModel();
-                _parameters.Add("@p_login_json", JsonConvert.SerializeObject(user), DbType.String, ParameterDirection.Input);
-                _conn.PrepararProcedimiento("dbo.[USERS.Login]", _parameters);
-                var Json = (string)_conn.QueryFirstOrDefaultDapper(TipoDato.Cadena);
-                if (Json != string.Empty)
-                {
-                    JArray arr = JArray.Parse(Json);
-                    foreach (JObject jsonOperaciones in arr.Children<JObject>())
-                    {
-                        model = new LoginModel()
-                        {
-                            Id = Convert.ToInt32(jsonOperaciones["Id"].ToString()),
-                            Name = jsonOperaciones["Name"].ToString(),
-                            LastName = jsonOperaciones["LastName"].ToString(),
-                        };
-
-                    }
-                }
+                LoginMinModel model = new LoginMinModel();
+                _parameters.Add("@Nick", login.Nick, DbType.String, ParameterDirection.Input);
+                _conn.PrepararProcedimiento("dbo.[CheckUser]", _parameters);
+                model = _conn.QueryFirstOrDefaultDapper();
                 return model;
             }
             catch (SqlException sqlEx)
@@ -65,11 +49,9 @@ namespace CORE.Users.Services
             {
                 _conn.Dispose();
             }
+
+
         }
-
-        
-
-        #region Dispose
 
         protected virtual void Dispose(bool disposing)
         {
@@ -99,6 +81,5 @@ namespace CORE.Users.Services
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
         }
-        #endregion
     }
 }

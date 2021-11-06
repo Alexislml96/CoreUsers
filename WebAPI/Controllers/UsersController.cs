@@ -29,13 +29,7 @@ namespace WebAPI.Controllers
         {
 
             List<UserModel> model = new List<UserModel>();
-            //using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
-            //    //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
-            //{
-            //    model = User.GetUsers();
-            //}
-            using (IUser User = FactorizerService.Inicializar(EServer.CLOUD))
-                //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
+            using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
             {
                 model = User.GetUsers();
             }
@@ -53,7 +47,6 @@ namespace WebAPI.Controllers
 
             UserModel model = new UserModel();
             using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
-                //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
             {
                 model = User.GetUser(ID);
             }
@@ -71,7 +64,6 @@ namespace WebAPI.Controllers
 
             long model = 0;
             using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
-                //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
             {
                 model = User.AddUser(user);
             }
@@ -89,7 +81,6 @@ namespace WebAPI.Controllers
 
             bool model = false;
             using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
-                //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
             {
                 model = User.UpdateUser(user);
             }
@@ -106,7 +97,6 @@ namespace WebAPI.Controllers
                 return BadRequest("Ingrese un ID válido");
 
             using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
-                //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
             {
                 User.DeleteUser(ID);
             }

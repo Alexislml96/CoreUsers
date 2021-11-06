@@ -29,7 +29,12 @@ namespace WebAPI.Controllers
         {
 
             List<UserModel> model = new List<UserModel>();
-            using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
+            //using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
+            //    //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
+            //{
+            //    model = User.GetUsers();
+            //}
+            using (IUser User = FactorizerService.Inicializar(EServer.CLOUD))
                 //using (IUser User = Users_CORE.Services.FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? Users_CORE.Models.EServer.CLOUD : Users_CORE.Models.EServer.CLOUD))
             {
                 model = User.GetUsers();

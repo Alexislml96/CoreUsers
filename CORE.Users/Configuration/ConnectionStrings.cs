@@ -10,7 +10,7 @@ namespace CORE.Users.Configuration
     {
         public static string LocalServer = "TUXQ5BZpFheMIRcppfSExvDHc7K+YhlKoEoBtk1CMUx0cpo5aLXJ185s6fE3GwxqPwQJZv9K/52Nvlla3WHTGM09bNQACrPNenKYQ0dln0a9Xvk846FSHn9BlmaQpiRRq7xa4NVgPYwwZDXkNr5fOrqAJJtGsNnv/xChZf3S+3U2Ouz+wHJ55ymjZ5Bz4qUhUSi1RcGHFz4PkppVDqtuDkhooZw7joR9nrT1zy6klMw5CTMPQRuLpi+0PwiZb/TBcbpY75n9suLDCzrI+cHJEiO9dhRsOHM5J95Zm7a3aQ3O7LqYyImUk9AI+lpsuGgQd1AMhwTlJEir/srv307yhUO5s6mQB1UWJfskMrQ4+VuUT6JfWr9Wotvbd/jVWVvtvNG9AdOwN4bOLPdPavO79mJXmgefJFiwFHb1of+sxtQ4OtUPSLSIsBEbwO14bD+VW5SOqiQS5ZrFRRhTk6ofX+AoI3OnU44R4izOK8+gSZP+a0Tv+dVoCmga6vobPMTVhm9I0K6MblhXZng7BVvmBg==";
 
-        public static string CloudServer = "0ucggn4XvBzsC2baApwk56BXfM3k6xah5Mm7QQSVoKCXsn9a2NT+WRJL5Fn/oLAGe8dXh62W/hJPAh4kUEP5Ghk1BD3d3YhIJ0gff73PB971Pw1hvbx8balkoPHhFNORrd+CZYiJaC0fcIFtjI1oAKcUNWPx7jpn2ffRLhvwk/nxitFie0eyomHNml49Hk2JctKaQrv33h2aSer2ykFAt+Uths1uSzUMqwGQgeMyVIKg7a6Yr02AVkLa/Cfn3wRw2vYMT19S5dN2cIYHze/hE2Czj2GCaSaKSFjc9qA54sqzbK7nG1OIlhJ+qXL95tlq59YqHzuc8SWE9IhQg3Xf+TrhPAjYV+ODDsypZ17irQste5rEeQiehdIpMDFhugGICiFcIkoJksFUE5F7+7pVY8NEF9AaBkVy0OYXGgqr8e9DqJy9Ltqtm97m/IFpvdWq+SSOxn+2ahwI7taDfsprvahPIvinslTm46O8Hgo2IcSDAMUxuCYqkO+ZfTzKt34xm9M6HLKS06Q88ggK7Dr5mth4Q7YJbCPiTMXCDzlIDriNzhZZEFB5tS6APmp5UKnXVsvxxgZMF0d+hzKE3Ej8GVvk4e8kWowiGwEqx/HmJ6qQYnsCKu4Ie5e7J+Cr+Hws";
+        public static string CloudServer = "Server=tcp:mtwdm-alexis.database.windows.net,1433;Initial Catalog=core_3crud;Persist Security Info=False;User ID=Alexlml96;Password=Maestria_123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
 
         public static string SecretKey = "SPCM8455ArgXtg8FUTr8fpnvdQ5f0jaYXvnUfcdEeNTJmQHO8GEcJFr9uOqlwDZO";
 

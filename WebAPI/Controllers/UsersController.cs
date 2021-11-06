@@ -45,7 +45,7 @@ namespace WebAPI.Controllers
 
         ///https://localhost:5001/api/User/GetUser?ID=2
         [HttpGet]
-        [Route("GetUser")]
+        [Route("GetUser/{id}")]
         public ActionResult<UserModel> GetUser(int ID)
         {
             if (ID == 0)
@@ -63,7 +63,7 @@ namespace WebAPI.Controllers
 
         //https://localhost:5001/api/User/AddUser
         [HttpPost]
-        [Route("[action]")]
+        [Route("AddUser")]
         public ActionResult AddUser(UserModel user)
         {
             if (user == null)
@@ -81,7 +81,7 @@ namespace WebAPI.Controllers
 
         //https://localhost:5001/api/User/UpdateUser
         [HttpPost]
-        [Route("[action]")]
+        [Route("UpdateUser")]
         public ActionResult UpdateUser(UserModel user)
         {
             if (user.Identificador == 0)
@@ -99,7 +99,7 @@ namespace WebAPI.Controllers
 
         //https://localhost:5001/api/user/deleteuser?ID=2
         [HttpDelete]
-        [Route("[action]")]
+        [Route("DeleteUser/{id}")]
         public ActionResult DeleteUser(int ID)
         {
             if (ID == 0)

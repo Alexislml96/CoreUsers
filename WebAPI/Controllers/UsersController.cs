@@ -29,7 +29,7 @@ namespace WebAPI.Controllers
         {
 
             List<UserModel> model = new List<UserModel>();
-            using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL : EServer.CLOUD))
+            using (IUser User = FactorizerService.Inicializar(ConnectionStringAzure == string.Empty ? EServer.LOCAL :EServer.CLOUD))
             {
                 model = User.GetUsers();
             }
@@ -39,7 +39,7 @@ namespace WebAPI.Controllers
 
         ///https://localhost:5001/api/User/GetUser?ID=2
         [HttpGet]
-        [Route("GetUser/{id}")]
+        [Route("GetUser/{ID}")]
         public ActionResult<UserModel> GetUser(int ID)
         {
             if (ID == 0)
@@ -89,8 +89,8 @@ namespace WebAPI.Controllers
         }
 
         //https://localhost:5001/api/user/deleteuser?ID=2
-        [HttpDelete]
-        [Route("DeleteUser/{id}")]
+        [HttpDelete()]
+        [Route("DeleteUser/{ID}")]
         public ActionResult DeleteUser(int ID)
         {
             if (ID == 0)

@@ -14,11 +14,10 @@ namespace CORE.Users.Configuration
     {
         public static IConnectionDB<T> Create(string ConnectionString, DbEnum DB)
         {
-            return Factorizer<T>.Create(ConnectionString, DB);
-            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
-            //    return Factorizer<T>.Create(ConnectionString, DB);
-            //else
-            //    return Factorizer<T>.Create(EncryptTool.Decrypt(ConnectionString), DB);
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production")
+                return Factorizer<T>.Create(ConnectionString, DB);
+            else
+                return Factorizer<T>.Create(EncryptTool.Decrypt(ConnectionString), DB);
         }
     }
 }

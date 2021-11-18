@@ -33,7 +33,8 @@ if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Production"
                          ValidateIssuerSigningKey = true,
                          ValidIssuer = Environment.GetEnvironmentVariable("ISSUER_TOKEN"),
                          ValidAudience = Environment.GetEnvironmentVariable("AUDIENCE_TOKEN"),
-                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY")))
+                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("SECRET_KEY"))),
+                         ClockSkew = TimeSpan.Zero,
                      };
                  });
 }
@@ -51,7 +52,8 @@ else
                           ValidateIssuerSigningKey = true,
                           ValidIssuer = builder.Configuration["JWT:ISSUER_TOKEN"],
                           ValidAudience = builder.Configuration["JWT:AUDIENCE_TOKEN"],
-                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SECRET_KEY"]))
+                          IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SECRET_KEY"])),
+                          ClockSkew = TimeSpan.Zero,
                       };
                   });
 }

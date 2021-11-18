@@ -47,5 +47,16 @@ namespace CORE.Users.Services
                 _ => throw new NullReferenceException(),
             };
         }
+
+        public static IRefreshService Refresh(EServer typerServer)
+        {
+            return typerServer switch
+            {
+                EServer.UDEFINED => throw new NullReferenceException(),
+                EServer.LOCAL => new RefreshService(BridgeDBConnection<RefreshToken>.Create(ConnectionStrings.LocalServer, DbEnum.Sql)),
+                EServer.CLOUD => new RefreshService(BridgeDBConnection<RefreshToken>.Create(ConnectionStrings.CloudServer, DbEnum.Sql)),
+                _ => throw new NullReferenceException(),
+            };
+        }
     }
 }
